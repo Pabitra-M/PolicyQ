@@ -7,3 +7,4 @@ weaviate-client
 sentence-transformers
 transformers
 torch
+python-dotenv
