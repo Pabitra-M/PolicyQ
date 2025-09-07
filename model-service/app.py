@@ -1,23 +1,27 @@
-import os
-from dotenv import load_dotenv
-
 from fastapi import FastAPI
-import weaviate
-from weaviate.classes.init import Auth
+from db import init_weaviate
+from contextlib import asynccontextmanager
 
-load_dotenv()  # Load environment variables from .env file
-app = FastAPI()
+# Lifespan function handles startup and shutdown
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: initialize Weaviate client
+    app.state.client = init_weaviate()
+    yield
+    # Shutdown: close Weaviate client
+    app.state.client.close()
 
-# Simple endpoint to return Hello World
+app = FastAPI(lifespan=lifespan)
+
 @app.get("/")
 def hello():
-    return {"message": "Hello World "}
+    return {"message": "Hello World lol"}
 
+@app.get("/check")
+def check_weaviate():
+    return {"weaviate_ready": app.state.client.is_ready()}
 
-# Weaviate client setup
-
+# Run directly with: python app.py
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
