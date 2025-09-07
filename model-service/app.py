@@ -1,16 +1,17 @@
 from fastapi import FastAPI
 from db import init_weaviate
+from contextlib import asynccontextmanager
 
-app = FastAPI()
-
-@app.on_event("startup")
-def startup_event():
-    # Store client inside app.state
+# Lifespan function handles startup and shutdown
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: initialize Weaviate client
     app.state.client = init_weaviate()
-
-@app.on_event("shutdown")
-def shutdown_event():
+    yield
+    # Shutdown: close Weaviate client
     app.state.client.close()
+
+app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def hello():
@@ -20,7 +21,7 @@ def hello():
 def check_weaviate():
     return {"weaviate_ready": app.state.client.is_ready()}
 
-# Run directly with: python main.py
+# Run directly with: python app.py
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
