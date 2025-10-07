@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "target": "ES2024",
+        "jsx": "react-jsx",
+        "allowImportingTsExtensions": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strict": true
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ],
+   "reactFunctionalExportComponent": {
+    "prefix": "rfce",
+    "body": [
+      "import React from 'react'",
+      "",
+      "function ${1:ComponentName}() {",
+      "  return (",
+      "    <div>${1:ComponentName}</div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1:ComponentName}"
+    ],
+    "description": "Creates a React Functional Component with ES7 module system"
+  }
+}

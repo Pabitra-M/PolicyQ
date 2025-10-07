@@ -1,0 +1,26 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Titillium Web", sans-serif;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  width: 100%;
+  position: fixed; /* keeps it at the top */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* keeps it above other elements */
+}
+
+.content {
+  margin-top: 70px; /* adjust based on your navbar height */
+  flex: 1;
+  padding: 20px;
+}
